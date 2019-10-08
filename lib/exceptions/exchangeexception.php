@@ -1,0 +1,11 @@
+<?php
+
+namespace Ds\Migrate\Exceptions;
+
+use Exception;
+
+class ExchangeException extends Exception
+{
+
+
+}
