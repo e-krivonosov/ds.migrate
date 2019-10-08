@@ -1,27 +1,10 @@
 # Миграции для разработчиков (1С-Битрикс) #
-[![Latest Stable Version](https://poser.pugx.org/andreyryabin/ds.migrate/v/stable.svg)](https://packagist.org/packages/andreyryabin/ds.migrate/)
-[![Total Downloads](https://img.shields.io/packagist/dt/andreyryabin/ds.migrate.svg?style=flat)](https://packagist.org/packages/andreyryabin/ds.migrate)
 
 Помогает переносить изменения между нескольким копиями проекта.
 
 Все изменения для базы данных пишутся в файлы миграций, эти файлы, как и весь код проекта, хранятся в системе контроля версий (например git) и попадают в копии разработчиков, после чего им необходимо выполнить установку новых миграций, чтобы обновить бд.
 
 Работать можно как через консоль, так и через админку.
-
-* Маркетплейс: [http://marketplace.1c-bitrix.ru/solutions/ds.migrate/](http://marketplace.1c-bitrix.ru/solutions/ds.migrate/)
-* Composer: [https://packagist.org/packages/andreyryabin/ds.migrate](https://packagist.org/packages/andreyryabin/ds.migrate)
-* Документация: [https://github.com/andreyryabin/ds.migrate/wiki](https://github.com/andreyryabin/ds.migrate/wiki)
-* Материалы: [https://dev.1c-bitrix.ru/community/webdev/user/39653/blog/](https://dev.1c-bitrix.ru/community/webdev/user/39653/blog/)
-* Группа в телеграм: [https://t-do.ru/ds_migrate_bitrix](https://t-do.ru/ds_migrate_bitrix)
-
-Особая благодарность
--------------------------
-Самой лучшей IDE на свете!\
-[![Phpstorm](https://raw.githubusercontent.com/wiki/andreyryabin/ds.migrate/assets/phpstorm.png)](https://www.jetbrains.com/?from=ds.migrate)
-
-А также всем помощникам!\
-[https://github.com/andreyryabin/ds.migrate/blob/master/contributors.txt](https://github.com/andreyryabin/ds.migrate/blob/master/contributors.txt)
-
 
 Установка через composer
 -------------------------
@@ -34,7 +17,7 @@
     }
   },
   "require": {
-    "andreyryabin/ds.migrate": "dev-master"
+    "evk/ds.migrate": "dev-master"
   },
 }
 
@@ -65,9 +48,6 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/bitrix/modules/ds.migrate/tools/migra
 * php bin/migrate up [version] (накатить выбранную миграцию)
 * php bin/migrate down (откатить все миграции)
 * php bin/migrate down [version] (откатить выбранную миграцию)
-
-Все команды: https://github.com/andreyryabin/ds.migrate/blob/master/commands.txt
-
 
 Тегирование миграций
 -------------------------
