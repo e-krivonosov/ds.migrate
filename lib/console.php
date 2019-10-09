@@ -240,19 +240,17 @@ class Console
     {
         $versionName = $this->getArg(0);
 
-        if (is_numeric($versionName)) {
-            /** @deprecated */
-            $this->exitWithMessage('limit is no longer supported');
-        }
-
-        if ($this->versionManager->checkVersionName($versionName)) {
-            $this->executeOnce($versionName, 'up');
-        } else {
+        if (empty($versionName) || is_numeric($versionName)) {
+            $limit = intval($versionName);
             $this->executeAll([
                 'status' => 'new',
                 'search' => $this->getArg('--search='),
                 'tag' => $this->getArg('--tag='),
-            ]);
+            ], $limit);
+        } elseif($this->versionManager->checkVersionName($versionName)) {
+            $this->executeOnce($versionName, 'up');
+        } else {
+            $this->exitWithMessage('Не найдена указанная миграция');
         }
     }
 
@@ -262,21 +260,35 @@ class Console
     public function commandDown()
     {
         $versionName = $this->getArg(0);
-
-        if (is_numeric($versionName)) {
-            /** @deprecated */
-            $this->exitWithMessage('limit is no longer supported');
-        }
-
-        if ($this->versionManager->checkVersionName($versionName)) {
-            $this->executeOnce($versionName, 'down');
-        } else {
+        if (empty($versionName) || is_numeric($versionName)) {
+            $limit = intval($versionName);
+            if (empty($limit)) {
+                $limit = 1;
+            }
             $this->executeAll([
                 'status' => 'installed',
                 'search' => $this->getArg('--search='),
                 'tag' => $this->getArg('--tag='),
-            ]);
+            ], $limit);
+        } elseif($this->versionManager->checkVersionName($versionName)) {
+            $this->executeOnce($versionName, 'down');
+        } else {
+            $this->exitWithMessage('Не найдена указанная миграция');
         }
+    }
+    /**
+     * @throws MigrationException
+     */
+    public function commandDownUp()
+    {
+        $this->commandRedo();
+    }
+    /**
+     * @throws MigrationException
+     */
+    public function commandRefresh()
+    {
+        $this->commandRedo();
     }
 
     /**
@@ -501,13 +513,16 @@ class Console
     }
 
     /**
+     * @param int $limit
      * @param $filter
      * @throws MigrationException
      */
-    protected function executeAll($filter)
+    protected function executeAll($filter, $limit=0)
     {
         $success = 0;
         $fails = 0;
+        $limit = intval($limit);
+        $hasLimit = ($limit > 0);
 
         $versions = $this->versionManager->getVersions($filter);
 
@@ -523,7 +538,7 @@ class Console
                 $fails++;
             }
 
-            if ($fails && $this->versionConfig->getVal('stop_on_errors')) {
+            if (($hasLimit && --$limit === 0) || ($fails && $this->versionConfig->getVal('stop_on_errors'))) {
                 break;
             }
 
