@@ -262,13 +262,15 @@ class Console
         $versionName = $this->getArg(0);
         if (empty($versionName) || is_numeric($versionName)) {
             $limit = intval($versionName);
-            if (empty($limit)) {
+            $tag = $this->getArg('--tag=');
+            $search = $this->getArg('--search=');
+            if (empty($tag) && empty($search) && empty($limit)) {
                 $limit = 1;
             }
             $this->executeAll([
                 'status' => 'installed',
-                'search' => $this->getArg('--search='),
-                'tag' => $this->getArg('--tag='),
+                'search' => $search,
+                'tag' => $tag,
             ], $limit);
         } elseif($this->versionManager->checkVersionName($versionName)) {
             $this->executeOnce($versionName, 'down');
@@ -297,7 +299,7 @@ class Console
     public function commandRedo()
     {
         $version = $this->getArg(0);
-        if ($version) {
+        if ($this->versionManager->checkVersionName($version)) {
             $this->executeVersion($version, 'down');
             $this->executeVersion($version, 'up');
         } else {
