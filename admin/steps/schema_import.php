@@ -46,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $hasSteps && check_bitrix_sessid('se
 
         ?>
         <script>
-            schemaExecuteStep('<?=$_POST["step_code"]?>', <?=$json?>);
+            schemaExecuteStep('<?=htmlspecialchars($_POST["step_code"])?>', <?=$json?>);
         </script>
         <?
     } catch (Exception $e) {
